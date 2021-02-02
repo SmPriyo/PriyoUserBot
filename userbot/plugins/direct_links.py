@@ -1,4 +1,4 @@
-# CatUserbot module containing various sites direct links generators
+# PriyoUserbot module containing various sites direct links generators
 
 # Copyright (C) 2019 The Raphielscape Company LLC.
 #
@@ -33,25 +33,30 @@ async def direct_link_generator(request):
         return
     reply = ""
     links = re.findall(r"\bhttps?://.*\.\S+", message)
-
-    def direct_link_generator(link: str):
-    """ direct links generator """
-    if not link:
-        raise DirectDownloadLinkException("`No links found!`")
-    elif 'zippyshare.com' in link:
-        return zippy_share(link)
-    elif 'yadi.sk' in link:
-        return yandex_disk(link)
-    elif 'cloud.mail.ru' in link:
-        return cm_ru(link)
-    elif 'mediafire.com' in link:
-        return mediafire(link)
-    elif 'osdn.net' in link:
-        return osdn(link)
-    elif 'github.com' in link:
-        return github(link)
-    else:
-        raise DirectDownloadLinkException(f'No Direct link function found for {link}')
+    if not links:
+        reply = "`No links found!`"
+        await catevent.edit(reply)
+    for link in links:
+        if "drive.google.com" in link:
+            reply += gdrive(link)
+        elif "zippyshare.com" in link:
+            reply += zippy_share(link)
+        elif "mega." in link:
+            reply += mega_dl(link)
+        elif "yadi.sk" in link:
+            reply += yandex_disk(link)
+        elif "cloud.mail.ru" in link:
+            reply += cm_ru(link)
+        elif "mediafire.com" in link:
+            reply += mediafire(link)
+        elif "sourceforge.net" in link:
+            reply += sourceforge(link)
+        elif "osdn.net" in link:
+            reply += osdn(link)
+        elif "github.com" in link:
+            reply += github(link)
+        elif "androidfilehost.com" in link:
+            reply += androidfilehost(link)
         else:
             reply += re.findall(r"\bhttps?://(.*?[^/]+)", link)[0] + "is not supported"
     await catevent.edit(reply)
